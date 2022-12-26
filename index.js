@@ -69,6 +69,7 @@ const waterLayer = new GeoJSON(waters, {
     return {
       color: '#3388ff',
       weight: 1,
+      fillOpacity: 1,
     };
   },
 });
@@ -90,7 +91,6 @@ const greenLayer = new GeoJSON(greens, {
       color: '#33ff88',
       weight: 1,
       stroke: false,
-      fillOpacity: 1,
     };
   },
 });
@@ -150,20 +150,24 @@ control.addTo(map);
 // d3 magic
 const svg = d3.select('svg');
 const defs = svg.append('svg:defs');
-const gradient = defs.append('radialGradient');
-gradient.attr('id', 'green');
-gradient
-  .append('stop')
-  .attr('offset', '0%')
-  .attr('stop-color', '#0f9a08')
-  .attr('stop-opacity', '0.6');
-gradient
-  .append('stop')
-  .attr('offset', '100%')
-  .attr('stop-color', '#0f9a08')
-  .attr('stop-opacity', '0.1');
+const pattern = defs.append('svg:pattern');
+pattern
+  .attr('id', 'water')
+  .attr('width', 225)
+  .attr('height', 225)
+  .attr('patternUnits', 'userSpaceOnUse');
+const image = pattern.append('svg:image');
+image
+  .attr(
+    'href',
+    'https://cdn.jsdelivr.net/gh/shengzheng1981/leaflet-campus@main/assets/images/water01.jpg'
+  )
+  .attr('width', 225)
+  .attr('height', 225)
+  .attr('x', 0)
+  .attr('y', 0);
 
-greenLayer.eachLayer((layer) => {
+waterLayer.eachLayer((layer) => {
   const path = layer._path;
-  path.setAttribute('fill', 'url(#green)');
+  path.setAttribute('fill', 'url(#water)');
 });
